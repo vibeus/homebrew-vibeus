@@ -7,22 +7,22 @@ class ClangFormat < Formula
   head "https://github.com/llvm/llvm-project.git", branch: "main"
 
   stable do
-    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/llvm-16.0.6.src.tar.xz"
-    sha256 "e91db44d1b3bb1c33fcea9a7d1f2423b883eaa9163d3d56ca2aa6d2f0711bc29"
+    url "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-18.1.8.src.tar.xz"
+    sha256 "f68cf90f369bc7d0158ba70d860b0cb34dbc163d6ff0ebc6cfa5e515b9b2e28d"
 
     resource "clang" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/clang-16.0.6.src.tar.xz"
-      sha256 "1186b6e6eefeadd09912ed73b3729e85b59f043724bb2818a95a2ec024571840"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang-18.1.8.src.tar.xz"
+      sha256 "5724fe0a13087d5579104cedd2f8b3bc10a212fb79a0fcdac98f4880e19f4519"
     end
 
     resource "cmake" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/cmake-16.0.6.src.tar.xz"
-      sha256 "39d342a4161095d2f28fb1253e4585978ac50521117da666e2b1f6f28b62f514"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/cmake-18.1.8.src.tar.xz"
+      sha256 "59badef592dd34893cd319d42b323aaa990b452d05c7180ff20f23ab1b41e837"
     end
 
     resource "third-party" do
-      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.6/third-party-16.0.6.src.tar.xz"
-      sha256 "15f5b9aeeba938530af977d5f9205612737a091a7f0f6c8075df8723b7713f70"
+      url "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/third-party-18.1.8.src.tar.xz"
+      sha256 "b76b810f3d3dc5d08e83c4236cb6e395aa9bd5e3ea861e8c319b216d093db074"
     end
   end
 
@@ -33,15 +33,14 @@ class ClangFormat < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "7b6ca3e5d02c60d10e25665953865a8bcc9e5d14e267ce4c561b9a6e3528e12a"
-    sha256 cellar: :any_skip_relocation, arm64_ventura:  "91f8990b07097ce1b70a7d0cf4141236f25ba541423be618a839330f380ce3ba"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "c0c6726be631b03ee7d48d4086df4b420d1fb5a62411ed08bee5a86e4916c0bb"
-    sha256 cellar: :any_skip_relocation, arm64_big_sur:  "09ec7353241206bd516a26e869d8621edb0882279fcafe2cfc660f583646f15a"
-    sha256 cellar: :any_skip_relocation, sonoma:         "722bde48095d396f9ab00f1fc9de6082fc6353a7fdd55acbcbcf827f2a2e471b"
-    sha256 cellar: :any_skip_relocation, ventura:        "c6ecd35aa7796cb0beb3c3ad1bb83d7e6f649f679927e4d7ed9cff0bd4245ecf"
-    sha256 cellar: :any_skip_relocation, monterey:       "2fe5c76681423b7125ef9db21d3ad1a37c47dda84909c6b4f9ac796a574ac450"
-    sha256 cellar: :any_skip_relocation, big_sur:        "83cb029c9aa6f04c665d20040f5922a26f8fb06cadffce6115cba56da002f87f"
-    sha256 cellar: :any_skip_relocation, x86_64_linux:   "1cc843ad43e6d5e32e9935c21a6ef79d6878bdd74472695327296ffdc98380e3"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia:  "1d4b378eae264d381e5d75e8fd31c89931ca5044b7699246d3dfbf826fe98f10"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma:   "6f9a261484afa3a336c77cbf026b3e2f24c4ef5247e2179598c5e0b6f4de2c48"
+    sha256 cellar: :any_skip_relocation, arm64_ventura:  "8ea1ac8ea7cdc00dd98ef40cb19d6f206b1c0e0874e4a41543d967fb7a883bb4"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "4b06e209a1bd526599f634e97ff41f7a9bf01d9498f64b32ee6ea2eeebc65bab"
+    sha256 cellar: :any_skip_relocation, sonoma:         "b6ca9b11944c9babb5ae0535a69e45ceee868ae2407b2a8fd3be99ad559bd94a"
+    sha256 cellar: :any_skip_relocation, ventura:        "076c269305fe377fe1feb374fed85ebe94730791a41d4611df30d799585ace32"
+    sha256 cellar: :any_skip_relocation, monterey:       "0c46df83b0fcc7c94a22c7caa17c95a41964d36edb461773c93b00e160f2ab6d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:   "5f82f4f4a721d3776c85941a9bd78b546ab6c0d50ec35d5346186b5f5d4c1d7f"
   end
 
   depends_on "cmake" => :build
@@ -56,6 +55,10 @@ class ClangFormat < Formula
   end
 
   def install
+    odie "clang resource needs to be updated" if build.stable? && version != resource("clang").version
+    odie "cmake resource needs to be updated" if build.stable? && version != resource("cmake").version
+    odie "third-party resource needs to be updated" if build.stable? && version != resource("third-party").version
+
     llvmpath = if build.head?
       ln_s buildpath/"clang", buildpath/"llvm/tools/clang"
 
