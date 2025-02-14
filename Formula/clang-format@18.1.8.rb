@@ -1,4 +1,4 @@
-class ClangFormat < Formula
+class ClangFormatAT1818 < Formula
   desc "Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript"
   homepage "https://clang.llvm.org/docs/ClangFormat.html"
   # The LLVM Project is under the Apache License v2.0 with LLVM Exceptions
@@ -49,6 +49,8 @@ class ClangFormat < Formula
   uses_from_macos "ncurses"
   uses_from_macos "python", since: :catalina
   uses_from_macos "zlib"
+
+  keg_only "it may conflict with the clang-format from main llvm formula"
 
   on_linux do
     keg_only "it conflicts with llvm"
